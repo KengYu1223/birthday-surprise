@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Happy Birthday! 專屬生日驚喜</title>
+  <!-- Canvas Confetti 動畫庫 -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #ff6b81;
+      --secondary-color: #ff8e72;
+      --bg-color: #fff5f6;
+      --card-bg: #ffffff;
+      --text-color: #4a4a4a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      padding: 28px 20px;
+      box-shadow: 0 10px 30px rgba(255, 107, 129, 0.15);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 頁面切換效果 */
+    .screen {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out forwards;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 標題風格 */
+    h1 {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    /* 解鎖頁面元件 */
+    .lock-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+
+    input[type="password"] {
+      width: 80%;
+      padding: 12px 16px;
+      border: 2px solid #ffd1d8;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      text-align: center;
+      letter-spacing: 4px;
+      outline: none;
+      transition: border-color 0.3s;
+      margin-bottom: 15px;
+    }
+
+    input[type="password"]:focus {
+      border-color: var(--primary-color);
+    }
+
+    .btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 80%;
+      box-shadow: 0 4px 15px rgba(255, 107, 129, 0.3);
+      transition: transform 0.1s, box-shadow 0.2s;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .error-msg {
+      color: #e74c3c;
+      font-size: 0.85rem;
+      margin-top: 8px;
+      display: none;
+    }
+
+    /* 禮物卡片列表 */
+    .gift-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-top: 15px;
+    }
+
+    .gift-card {
+      background: #fff;
+      border: 2px solid #ffe3e7;
+      border-radius: 16px;
+      padding: 16px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .gift-card:active {
+      transform: scale(0.98);
+      border-color: var(--primary-color);
+    }
+
+    .gift-emoji {
+      font-size: 2.5rem;
+      background: #fff0f2;
+      padding: 10px;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .gift-info h3 {
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 4px;
+    }
+
+    .gift-info p {
+      font-size: 0.85rem;
+      margin-bottom: 0;
+      color: #888;
+    }
+
+    /* 結果頁面 */
+    .result-icon {
+      font-size: 4rem;
+      margin-bottom: 10px;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .selected-box {
+      background: #fff0f2;
+      border-radius: 16px;
+      padding: 16px;
+      margin: 20px 0;
+      border: 1px dashed var(--primary-color);
+    }
+
+    .selected-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- 螢幕 1: 紀念日解鎖 -->
+    <div id="screen-lock" class="screen active">
+      <div class="lock-icon">🔒</div>
+      <h1>專屬生日密碼</h1>
+      <p>請輸入我們的紀念日解鎖驚喜禮物清單！</p>
+      <input type="password" id="password-input" placeholder="MMDD" maxlength="4" inputmode="numeric">
+      <button class="btn" onclick="checkPassword()">解鎖禮物</button>
+      <div id="error-msg" class="error-msg">密碼不對喔，再想一下！❤️</div>
+    </div>
+
+    <!-- 螢幕 2: 禮物選擇 -->
+    <div id="screen-gifts" class="screen">
+      <h1>🎂 生日快樂，寶貝！</h1>
+      <p>挑一個你最心儀的生日禮物吧：</p>
+      
+      <div class="gift-grid">
+        <!-- 禮物選項 1 -->
+        <div class="gift-card" onclick="selectGift('雙人浪漫小旅行', '✈️')">
+          <div class="gift-emoji">✈️</div>
+          <div class="gift-info">
+            <h3>雙人浪漫小旅行</h3>
+            <p>地點任你選，行程我包辦！</p>
+          </div>
+        </div>
+
+        <!-- 禮物選項 2 -->
+        <div class="gift-card" onclick="selectGift('夢幻奢華大餐', '🍽️')">
+          <div class="gift-emoji">🍽️</div>
+          <div class="gift-info">
+            <h3>夢幻奢華大餐</h3>
+            <p>帶你去吃你關注很久的那間高級餐廳。</p>
+          </div>
+        </div>
+
+        <!-- 禮物選項 3 -->
+        <div class="gift-card" onclick="selectGift('願望清單上的那件禮物', '🎁')">
+          <div class="gift-emoji">🎁</div>
+          <div class="gift-info">
+            <h3>願望清單實現卡</h3>
+            <p>直接挑你購物車裡最想買的東西！</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 螢幕 3: 選擇結果與傳送 -->
+    <div id="screen-result" class="screen">
+      <div class="result-icon">🎉</div>
+      <h1>太棒了！選項已確定</h1>
+      <p>你的選擇是：</p>
+      
+      <div class="selected-box">
+        <div id="selected-emoji" style="font-size: 2.5rem; margin-bottom: 5px;"></div>
+        <div id="selected-name" class="selected-title"></div>
+      </div>
+
+      <p>點擊下方按鈕，傳送訊息告訴我吧！</p>
+      <button class="btn" onclick="sendToLine()">傳送選擇給我 ❤️</button>
+    </div>
+
+  </div>
+
+  <script>
+    const CORRECT_PASSWORD = "0215"; // 設定的紀念日密碼
+    let chosenGift = "";
+
+    // 檢查密碼
+    function checkPassword() {
+      const input = document.getElementById("password-input").value;
+      const errorMsg = document.getElementById("error-msg");
+
+      if (input === CORRECT_PASSWORD) {
+        switchScreen("screen-lock", "screen-gifts");
+      } else {
+        errorMsg.style.display = "block";
+        document.getElementById("password-input").value = "";
+      }
+    }
+
+    // 選擇禮物與觸發特效
+    function selectGift(name, emoji) {
+      chosenGift = name;
+      document.getElementById("selected-name").innerText = name;
+      document.getElementById("selected-emoji").innerText = emoji;
+
+      // 切換至結果頁面
+      switchScreen("screen-gifts", "screen-result");
+
+      // 觸發彩帶動畫
+      fireConfetti();
+    }
+
+    // 畫面切換邏輯
+    function switchScreen(fromId, toId) {
+      document.getElementById(fromId).classList.remove("active");
+      document.getElementById(toId).classList.add("active");
+    }
+
+    // 慶祝彩帶與愛心特效 (使用 Canvas Confetti)
+    function fireConfetti() {
+      const count = 200;
+      const defaults = {
+        origin: { y: 0.7 }
+      };
+
+      function fire(particleRatio, opts) {
+        confetti(Object.assign({}, defaults, opts, {
+          particleCount: Math.floor(count * particleRatio)
+        }));
+      }
+
+      fire(0.25, { spread: 26, startVelocity: 55, colors: ['#ff6b81', '#ffa8a8'] });
+      fire(0.2, { spread: 60, colors: ['#ffffff', '#ff8e72'] });
+      fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+      fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, colors: ['#ff6b81'] });
+      fire(0.1, { spread: 120, startVelocity: 45 });
+    }
+
+    // 將結果轉發至 LINE
+    function sendToLine() {
+      const message = `親愛的！我在生日卡片網頁選了這個禮物：【${chosenGift}】❤️`;
+      // 使用 LINE URL Scheme 開啟 LINE 貼上文字
+      window.location.href = `https://line.me/R/share?text=${encodeURIComponent(message)}`;
+    }
+  </script>
+</body>
+</html>
