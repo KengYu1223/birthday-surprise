@@ -7,12 +7,16 @@
   <!-- Canvas Confetti 動畫庫 -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
+    /* =========================================================
+       1. 顏色調整區 (在這裡更換為你喜歡的色碼)
+       ========================================================= */
     :root {
-      --primary-color: #ff6b81;
-      --secondary-color: #ff8e72;
-      --bg-color: #fff5f6;
-      --card-bg: #ffffff;
-      --text-color: #4a4a4a;
+      --primary-color: #ff6b81;   /* 主色調：按鈕、標題、重點強調 */
+      --secondary-color: #ff8e72; /* 輔助漸層色：按鈕漸層色 */
+      --bg-color: #fff5f6;        /* 全頁面背景顏色 */
+      --card-bg: #ffffff;        /* 主要卡片背景顏色 */
+      --text-color: #4a4a4a;      /* 一般文字顏色 */
+      --border-color: #ffd1d8;    /* 輸入框與外框顏色 */
     }
 
     * {
@@ -39,16 +43,16 @@
       background: var(--card-bg);
       border-radius: 24px;
       padding: 28px 20px;
-      box-shadow: 0 10px 30px rgba(255, 107, 129, 0.15);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
       text-align: center;
       position: relative;
       overflow: hidden;
     }
 
-    /* 頁面切換效果 */
+    /* 頁面切換動畫 */
     .screen {
       display: none;
-      animation: fadeIn 0.5s ease-in-out forwards;
+      animation: fadeIn 0.4s ease-in-out forwards;
     }
 
     .screen.active {
@@ -60,11 +64,10 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* 標題風格 */
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       color: var(--primary-color);
-      margin-bottom: 12px;
+      margin-bottom: 8px;
     }
 
     p {
@@ -72,29 +75,6 @@
       line-height: 1.5;
       color: #666;
       margin-bottom: 20px;
-    }
-
-    /* 解鎖頁面元件 */
-    .lock-icon {
-      font-size: 3rem;
-      margin-bottom: 15px;
-    }
-
-    input[type="password"] {
-      width: 80%;
-      padding: 12px 16px;
-      border: 2px solid #ffd1d8;
-      border-radius: 12px;
-      font-size: 1.2rem;
-      text-align: center;
-      letter-spacing: 4px;
-      outline: none;
-      transition: border-color 0.3s;
-      margin-bottom: 15px;
-    }
-
-    input[type="password"]:focus {
-      border-color: var(--primary-color);
     }
 
     .btn {
@@ -106,13 +86,40 @@
       font-weight: bold;
       border-radius: 12px;
       cursor: pointer;
-      width: 80%;
-      box-shadow: 0 4px 15px rgba(255, 107, 129, 0.3);
-      transition: transform 0.1s, box-shadow 0.2s;
+      width: 100%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      transition: transform 0.1s;
     }
 
     .btn:active {
       transform: scale(0.98);
+    }
+
+    /* =========================================================
+       2. 四位數獨立密碼輸入框
+       ========================================================= */
+    .pin-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    .pin-input {
+      width: 50px;
+      height: 60px;
+      font-size: 1.8rem;
+      text-align: center;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      outline: none;
+      background: #fafafa;
+      transition: border-color 0.3s;
+    }
+
+    .pin-input:focus {
+      border-color: var(--primary-color);
+      background: #fff;
     }
 
     .error-msg {
@@ -122,23 +129,24 @@
       display: none;
     }
 
-    /* 禮物卡片列表 */
+    /* =========================================================
+       3. 禮物列表與大圖片樣式
+       ========================================================= */
     .gift-grid {
       display: flex;
       flex-direction: column;
       gap: 16px;
-      margin-top: 15px;
     }
 
     .gift-card {
       background: #fff;
-      border: 2px solid #ffe3e7;
+      border: 2px solid var(--border-color);
       border-radius: 16px;
-      padding: 16px;
+      padding: 12px;
       text-align: left;
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
       cursor: pointer;
       transition: border-color 0.2s, transform 0.2s;
     }
@@ -148,12 +156,13 @@
       border-color: var(--primary-color);
     }
 
-    .gift-emoji {
-      font-size: 2.5rem;
-      background: #fff0f2;
-      padding: 10px;
+    .gift-thumb {
+      width: 70px;
+      height: 70px;
       border-radius: 12px;
+      object-fit: cover;
       flex-shrink: 0;
+      background: #f0f0f0;
     }
 
     .gift-info h3 {
@@ -168,31 +177,56 @@
       color: #888;
     }
 
-    /* 結果頁面 */
+    /* =========================================================
+       4. 詳細介紹頁面與返回鍵
+       ========================================================= */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .back-btn {
+      background: none;
+      border: none;
+      color: var(--primary-color);
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 8px;
+    }
+
+    .gift-large-img {
+      width: 100%;
+      max-height: 220px;
+      object-fit: cover;
+      border-radius: 16px;
+      margin-bottom: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .gift-desc-box {
+      background: var(--bg-color);
+      padding: 16px;
+      border-radius: 12px;
+      text-align: left;
+      margin-bottom: 20px;
+    }
+
+    .gift-desc-text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #444;
+      white-space: pre-line;
+    }
+
+    /* 結果頁 */
     .result-icon {
       font-size: 4rem;
       margin-bottom: 10px;
-      animation: pulse 1.5s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-
-    .selected-box {
-      background: #fff0f2;
-      border-radius: 16px;
-      padding: 16px;
-      margin: 20px 0;
-      border: 1px dashed var(--primary-color);
-    }
-
-    .selected-title {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: var(--primary-color);
     }
   </style>
 </head>
@@ -200,60 +234,82 @@
 
   <div class="container">
     
-    <!-- 螢幕 1: 紀念日解鎖 -->
+    <!-- 螢幕 1: 紀念日解鎖 (4個獨立空格) -->
     <div id="screen-lock" class="screen active">
-      <div class="lock-icon">🔒</div>
-      <h1>專屬生日密碼</h1>
-      <p>請輸入我們的紀念日解鎖驚喜禮物清單！</p>
-      <input type="password" id="password-input" placeholder="MMDD" maxlength="4" inputmode="numeric">
-      <button class="btn" onclick="checkPassword()">解鎖禮物</button>
-      <div id="error-msg" class="error-msg">密碼不對喔，再想一下！❤️</div>
+      <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
+      <h1>我們的紀念日是幾月幾號？</h1>
+      <p>請輸入 4 位數字解鎖專屬驚喜！</p>
+      
+      <div class="pin-container">
+        <input type="number" class="pin-input" maxlength="1" inputmode="numeric">
+        <input type="number" class="pin-input" maxlength="1" inputmode="numeric">
+        <input type="number" class="pin-input" maxlength="1" inputmode="numeric">
+        <input type="number" class="pin-input" maxlength="1" inputmode="numeric">
+      </div>
+
+      <button class="btn" onclick="checkPassword()">確認解鎖</button>
+      <div id="error-msg" class="error-msg">日期不對喔，再想一下！❤️</div>
     </div>
 
-    <!-- 螢幕 2: 禮物選擇 -->
-    <div id="screen-gifts" class="screen">
+    <!-- 螢幕 2: 禮物選擇列表 -->
+    <div id="screen-list" class="screen">
       <h1>🎂 生日快樂，寶貝！</h1>
-      <p>挑一個你最心儀的生日禮物吧：</p>
+      <p>點擊下方禮物查看詳細資訊：</p>
       
       <div class="gift-grid">
-        <!-- 禮物選項 1 -->
-        <div class="gift-card" onclick="selectGift('雙人浪漫小旅行', '✈️')">
-          <div class="gift-emoji">✈️</div>
+        <!-- 禮物 1: 手鏈 -->
+        <div class="gift-card" onclick="openDetail('bracelet')">
+          <img src="https://images.unsplash.com/photo-1611591475155-4282fc289e84?w=300" class="gift-thumb" alt="手鏈">
           <div class="gift-info">
-            <h3>雙人浪漫小旅行</h3>
-            <p>地點任你選，行程我包辦！</p>
+            <h3>精緻手鏈</h3>
+            <p>點擊查看詳細資訊與我想對你說的話</p>
           </div>
         </div>
 
-        <!-- 禮物選項 2 -->
-        <div class="gift-card" onclick="selectGift('夢幻奢華大餐', '🍽️')">
-          <div class="gift-emoji">🍽️</div>
+        <!-- 禮物 2: 安全帽 -->
+        <div class="gift-card" onclick="openDetail('helmet')">
+          <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=300" class="gift-thumb" alt="安全帽">
           <div class="gift-info">
-            <h3>夢幻奢華大餐</h3>
-            <p>帶你去吃你關注很久的那間高級餐廳。</p>
+            <h3>質感安全帽</h3>
+            <p>點擊查看詳細資訊與我想對你說的話</p>
           </div>
         </div>
 
-        <!-- 禮物選項 3 -->
-        <div class="gift-card" onclick="selectGift('願望清單上的那件禮物', '🎁')">
-          <div class="gift-emoji">🎁</div>
+        <!-- 禮物 3: 手機殼 -->
+        <div class="gift-card" onclick="openDetail('phone-case')">
+          <img src="https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=300" class="gift-thumb" alt="手機殼">
           <div class="gift-info">
-            <h3>願望清單實現卡</h3>
-            <p>直接挑你購物車裡最想買的東西！</p>
+            <h3>專屬手機殼</h3>
+            <p>點擊查看詳細資訊與我想對你說的話</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- 螢幕 3: 選擇結果與傳送 -->
+    <!-- 螢幕 3: 禮物詳細介紹與敘述 (含返回鍵) -->
+    <div id="screen-detail" class="screen">
+      <div class="top-bar">
+        <button class="back-btn" onclick="switchScreen('screen-detail', 'screen-list')">← 返回重選</button>
+      </div>
+
+      <img id="detail-img" src="" class="gift-large-img" alt="禮物大圖">
+      <h1 id="detail-title"></h1>
+      
+      <div class="gift-desc-box">
+        <p id="detail-desc" class="gift-desc-text"></p>
+      </div>
+
+      <button class="btn" onclick="confirmGift()">就選這個了！❤️</button>
+    </div>
+
+    <!-- 螢幕 4: 最終確定頁面 -->
     <div id="screen-result" class="screen">
       <div class="result-icon">🎉</div>
       <h1>太棒了！選項已確定</h1>
-      <p>你的選擇是：</p>
+      <p>你選擇的禮物是：</p>
       
-      <div class="selected-box">
-        <div id="selected-emoji" style="font-size: 2.5rem; margin-bottom: 5px;"></div>
-        <div id="selected-name" class="selected-title"></div>
+      <div style="background: var(--bg-color); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
+        <h2 id="final-gift-name" style="color: var(--primary-color);"></h2>
       </div>
 
       <p>點擊下方按鈕，傳送訊息告訴我吧！</p>
@@ -264,46 +320,90 @@
 
   <script>
     const CORRECT_PASSWORD = "0215"; // 設定的紀念日密碼
-    let chosenGift = "";
+
+    // 禮物資料設定（你可以隨時替換圖片網址與想對她說的話）
+    const giftData = {
+      'bracelet': {
+        name: '精緻手鏈',
+        img: 'https://images.unsplash.com/photo-1611591475155-4282fc289e84?w=600', // 替換成你的圖片網址/檔名
+        desc: '這條手鏈我覺得非常適合你的氣質！希望讓你戴在手上一看到就能想到我，陪伴你每一天 ❤️'
+      },
+      'helmet': {
+        name: '質感安全帽',
+        img: 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?w=600', // 替換成你的圖片網址/檔名
+        desc: '為你挑選這頂安全帽，最重要的就是照顧你的安全！希望以後我們每次載你出門，都能戴著它安心兜風 🛵'
+      },
+      'phone-case': {
+        name: '專屬手機殼',
+        img: 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=600', // 替換成你的圖片網址/檔名
+        desc: '手機是每天用最久的東西，選一個質感超級好的手機殼給你，不僅保護手機，摸到的時候心情也會很好 ✨'
+      }
+    };
+
+    let currentSelectedKey = "";
+
+    // 自動控制 4 個 PIN 碼輸入框
+    const pinInputs = document.querySelectorAll('.pin-input');
+    pinInputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length === 1 && index < pinInputs.length - 1) {
+          pinInputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          pinInputs[index - 1].focus();
+        }
+      });
+    });
 
     // 檢查密碼
     function checkPassword() {
-      const input = document.getElementById("password-input").value;
+      let enteredPin = "";
+      pinInputs.forEach(input => enteredPin += input.value);
       const errorMsg = document.getElementById("error-msg");
 
-      if (input === CORRECT_PASSWORD) {
-        switchScreen("screen-lock", "screen-gifts");
+      if (enteredPin === CORRECT_PASSWORD) {
+        switchScreen("screen-lock", "screen-list");
       } else {
         errorMsg.style.display = "block";
-        document.getElementById("password-input").value = "";
+        pinInputs.forEach(input => input.value = "");
+        pinInputs[0].focus();
       }
     }
 
-    // 選擇禮物與觸發特效
-    function selectGift(name, emoji) {
-      chosenGift = name;
-      document.getElementById("selected-name").innerText = name;
-      document.getElementById("selected-emoji").innerText = emoji;
+    // 開啟詳細介紹頁面
+    function openDetail(key) {
+      currentSelectedKey = key;
+      const data = giftData[key];
 
-      // 切換至結果頁面
-      switchScreen("screen-gifts", "screen-result");
+      document.getElementById("detail-img").src = data.img;
+      document.getElementById("detail-title").innerText = data.name;
+      document.getElementById("detail-desc").innerText = data.desc;
 
-      // 觸發彩帶動畫
+      switchScreen("screen-list", "screen-detail");
+    }
+
+    // 確認選擇該禮物
+    function confirmGift() {
+      const data = giftData[currentSelectedKey];
+      document.getElementById("final-gift-name").innerText = data.name;
+
+      switchScreen("screen-detail", "screen-result");
       fireConfetti();
     }
 
-    // 畫面切換邏輯
+    // 畫面切換函數
     function switchScreen(fromId, toId) {
       document.getElementById(fromId).classList.remove("active");
       document.getElementById(toId).classList.add("active");
     }
 
-    // 慶祝彩帶與愛心特效 (使用 Canvas Confetti)
+    // 慶祝彩帶特效
     function fireConfetti() {
       const count = 200;
-      const defaults = {
-        origin: { y: 0.7 }
-      };
+      const defaults = { origin: { y: 0.7 } };
 
       function fire(particleRatio, opts) {
         confetti(Object.assign({}, defaults, opts, {
@@ -311,17 +411,17 @@
         }));
       }
 
-      fire(0.25, { spread: 26, startVelocity: 55, colors: ['#ff6b81', '#ffa8a8'] });
-      fire(0.2, { spread: 60, colors: ['#ffffff', '#ff8e72'] });
+      fire(0.25, { spread: 26, startVelocity: 55 });
+      fire(0.2, { spread: 60 });
       fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-      fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, colors: ['#ff6b81'] });
+      fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92 });
       fire(0.1, { spread: 120, startVelocity: 45 });
     }
 
-    // 將結果轉發至 LINE
+    // 發送結果至 LINE
     function sendToLine() {
-      const message = `親愛的！我在生日卡片網頁選了這個禮物：【${chosenGift}】❤️`;
-      // 使用 LINE URL Scheme 開啟 LINE 貼上文字
+      const giftName = giftData[currentSelectedKey].name;
+      const message = `親愛的！我在生日卡片網頁選了這個禮物：【${giftName}】❤️`;
       window.location.href = `https://line.me/R/share?text=${encodeURIComponent(message)}`;
     }
   </script>
