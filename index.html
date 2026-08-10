@@ -238,7 +238,7 @@
     <div id="screen-lock" class="screen active">
       <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
       <h1>我們的紀念日是幾月幾號？😤</h1>
-      <p>請輸入 4 位數字解鎖專屬驚喜！</p>
+      <p>提示： 4 位數字！</p>
       
       <div class="pin-container">
         <input type="number" class="pin-input" maxlength="1" inputmode="numeric">
@@ -248,13 +248,13 @@
       </div>
 
       <button class="btn" onclick="checkPassword()">確認解鎖</button>
-      <div id="error-msg" class="error-msg">日期不對喔，再想一下！❤️</div>
+      <div id="error-msg" class="error-msg">為甚麼會答錯！！！！😭</div>
     </div>
 
     <!-- 螢幕 2: 禮物選擇列表 -->
     <div id="screen-list" class="screen">
-      <h1>🎂 生日快樂，寶貝！</h1>
-      <p>點擊下方禮物查看詳細資訊：</p>
+      <h1>🎂 生日快樂 & 情人節快樂，寶貝！</h1>
+      <p>來挑寶貝的禮物吧！</p>
       
       <div class="gift-grid">
         <!-- 禮物 1: 手鏈 -->
@@ -262,7 +262,6 @@
           <img src="swarovski_pink_onhand.JPG" class="gift-thumb" alt="手鏈">
           <div class="gift-info">
             <h3>手鏈</h3>
-            <p>點擊查看詳細資訊與我想對你說的話</p>
           </div>
         </div>
 
@@ -271,7 +270,6 @@
           <img src="helmet.jpg" class="gift-thumb" alt="安全帽">
           <div class="gift-info">
             <h3>安全帽</h3>
-            <p>點擊查看詳細資訊與我想對你說的話</p>
           </div>
         </div>
 
@@ -280,16 +278,14 @@
           <img src="casitify.jpg" class="gift-thumb" alt="手機殼">
           <div class="gift-info">
             <h3>手機殼</h3>
-            <p>點擊查看詳細資訊與我想對你說的話</p>
           </div>
         </div>
 
-        <!-- 禮物 4: 小CK跟鞋 -->
+        <!-- 禮物 4: 跟鞋 -->
         <div class="gift-card" onclick="openDetail('heels')">
           <img src="charles_keith.jpg" class="gift-thumb" alt="跟鞋">
           <div class="gift-info">
-            <h3>小CK跟鞋</h3>
-            <p>點擊查看詳細資訊與我想對你說的話</p>
+            <h3>跟鞋</h3>
           </div>
         </div>
       </div>
@@ -348,9 +344,9 @@
         desc: '手機是每天用最久的東西，選一個質感超級好的手機殼給你，不僅保護手機，摸到的時候心情也會很好 ✨'
       },
       'heels': {
-        name: '小CK跟鞋',
+        name: '跟鞋',
         img: 'charles_keith.jpg', // 記得確認你的圖片檔名是否為 charles_keith.jpg
-        desc: '挑選了這雙優雅的小CK跟鞋，希望你穿上它去哪裡都能充滿自信，跟著我一起走遍更多美好的地方 ✨'
+        desc: '挑選了這雙優雅的跟鞋，希望你穿上它去哪裡都能充滿自信，跟著我一起走遍更多美好的地方 ✨'
       }
     };
 
